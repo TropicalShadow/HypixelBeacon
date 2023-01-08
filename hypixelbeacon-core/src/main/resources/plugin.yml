@@ -1,0 +1,40 @@
+name: HypixelBeacon
+main: club.tesseract.hypixelbeacon.HypixelBeacon
+version: @version@
+api-version: 1.19
+author: TropicalShadow
+description: A plugin that allows you to mine beacons to get beacon currency.
+website: https://tesseract.club
+loadbefore: [BossShopPro]
+softdepend: [PlaceholderAPI]
+commands:
+  hypixelbeacon:
+    description: The main command for the plugin.
+    usage: /beacon [adminitem, balance, reload]
+    aliases: [beacon]
+    permission: hypixelbeacon.command
+permissions:
+  hypixelbeacon.op:
+    description: Allows the player to use the /beacon command.
+    default: op
+  hypixelbeacon.break:
+    description: Allows you to break beacons.
+    default: true
+  hypixelbeacon.place:
+    description: Allows you to place beacons.
+    default: op
+  hypixelbeacon.remove:
+    description: Allows you to remove beacons.
+    default: op
+  hypixelbeacon.command:
+    description: Allows you to use the /beacon command.
+    default: true
+  hypixelbeacon.command.adminitem:
+    description: Allows you to use the /beacon item command.
+    default: op
+  hypixelbeacon.command.balance:
+    description: Allows you to use the /beacon balance command.
+    default: true
+  hypixelbeacon.command.reload:
+    description: Allows you to use the /beacon reload command.
+    default: op
