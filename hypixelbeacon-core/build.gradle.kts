@@ -25,8 +25,8 @@ dependencies {
 
     implementation(project(":hypixelbeacon-api"))
 
-    api("org.xerial:sqlite-jdbc:3.40.0.0")
-    api("mysql:mysql-connector-java:8.0.30")
+    implementation("org.xerial:sqlite-jdbc:3.40.0.0")
+    implementation("mysql:mysql-connector-java:8.0.30")
 }
 
 
@@ -36,9 +36,9 @@ tasks {
         archiveClassifier.set("")
         destinationDirectory.set(file("$rootDir/build/libs"))
 
-        dependencies {
-            include(project(":hypixelbeacon-api"))
-        }
+        relocate("kotlinx", "club.tesseract.hypixelbeacon.relocated.org.jetbrains.kotlinx")
+        relocate("com.charleskorn", "club.tesseract.hypixelbeacon.relocated.com.charleskorn")
+        exclude("DebugProbesKt.bin")
 
     }
 

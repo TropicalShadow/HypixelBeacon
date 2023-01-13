@@ -2,6 +2,7 @@ package club.tesseract.hypixelbeacon.database
 
 import club.tesseract.hypixelbeacon.HypixelBeacon
 import club.tesseract.hypixelbeacon.HypixelBeaconAPI
+import club.tesseract.hypixelbeacon.database.tables.BeaconLocation
 import club.tesseract.hypixelbeacon.database.tables.PlayerData
 import org.bukkit.Bukkit
 import org.jetbrains.exposed.sql.Database
@@ -16,6 +17,7 @@ object DatabaseManager{
 
             transaction {
                 SchemaUtils.create(PlayerData)
+                SchemaUtils.create(BeaconLocation)
             }
         } catch (e: Exception) {
             e.printStackTrace()

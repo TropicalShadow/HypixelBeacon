@@ -1,6 +1,6 @@
 allprojects {
-    group = "club.tesseract"
-    version = "1.0.0"
+    group = "club.tesseract.hypixelbeacon"
+    version = "1.0.1"
 }
 
 repositories {
