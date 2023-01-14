@@ -30,7 +30,7 @@ object BeaconCommand: TabExecutor {
                 result.add("reload")
             }
             if(sender.hasPermission("hypixelbeacon.command.adminitem") && "adminitem".startsWith(args[0], true)) {
-                result.add("admin")
+                result.add("adminitem")
             }
             if(sender.hasPermission("hypixelbeacon.command.balance") && "balance".startsWith(args[0], true)){
                 result.add("balance")
@@ -42,25 +42,25 @@ object BeaconCommand: TabExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(args.isEmpty()) {
-            sender.sendMessage("<red>Usage: /$label <reload|adminitem|balance>")
+            sender.sendMessage(Component.text("Usage: /$label <reload|adminitem|balance>", NamedTextColor.RED))
             return true
         }
         when(args[0].lowercase()) {
             "reload" -> {
                 if(!sender.hasPermission("hypixelbeacon.command.reload")) {
-                    sender.sendMessage("<red>You do not have permission to use this command.")
+                    sender.sendMessage(Component.text("You do not have permission to use this command.", NamedTextColor.RED))
                     return true
                 }
                 ConfigManager.loadConfigs()
-                sender.sendMessage("<green>Reloaded HypixelBeacon.")
+                sender.sendMessage(Component.text("Reloaded HypixelBeacon.", NamedTextColor.GREEN))
             }
             "adminitem" -> {
                 if(!sender.hasPermission("hypixelbeacon.command.adminitem")) {
-                    sender.sendMessage("<red>You do not have permission to use this command.")
+                    sender.sendMessage(Component.text("You do not have permission to use this command.", NamedTextColor.RED))
                     return true
                 }
                 if(sender !is Player) {
-                    sender.sendMessage("<red>You must be a player to use this command.")
+                    sender.sendMessage(Component.text("You must be a player to use this command.", NamedTextColor.RED))
                     return true
                 }
 
@@ -70,21 +70,21 @@ object BeaconCommand: TabExecutor {
                 adminItem.editMeta { it.lore(listOf(Component.text("Place this down to set a hypixel beacon", NamedTextColor.GRAY), Component.text("Break Hypixel Beacon to remove it", NamedTextColor.GRAY), Component.text("Admin Item Only", NamedTextColor.RED))) }
 
                 sender.inventory.addItem(adminItem)
-                sender.sendMessage("<green>Admin item added to your inventory.")
+                sender.sendMessage(Component.text("Admin Item added to your inventory.", NamedTextColor.GREEN))
             }
             "balance", "bal" -> {
                 if(!sender.hasPermission("hypixelbeacon.command.balance")) {
-                    sender.sendMessage("<red>You do not have permission to use this command.")
+                    sender.sendMessage(Component.text("You do not have permission to use this command.", NamedTextColor.RED))
                     return true
                 }
                 if(sender !is Player) {
-                    sender.sendMessage("<red>You must be a player to use this command.")
+                    sender.sendMessage(Component.text("You must be a player to use this command.", NamedTextColor.RED))
                     return true
                 }
-                sender.sendMessage("<green>Your balance is ${HypixelBeacon.getPlugin().economy.getBalance(sender.uniqueId)} ${HypixelBeacon.getPlugin().economy.currencyNamePlural}.")
+                sender.sendMessage("Your balance is ${HypixelBeacon.getPlugin().economy.getBalance(sender.uniqueId)} ${HypixelBeacon.getPlugin().economy.currencyNamePlural}.")
             }
             else -> {
-                sender.sendMessage("<red>Usage: /$label <reload|adminitem|balance>")
+                sender.sendMessage(Component.text("Usage: /$label <reload|adminitem|balance>", NamedTextColor.RED))
             }
         }
         return true

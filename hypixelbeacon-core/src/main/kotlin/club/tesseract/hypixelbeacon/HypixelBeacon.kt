@@ -9,11 +9,9 @@ import club.tesseract.hypixelbeacon.economy.BossShopProPoints
 import club.tesseract.hypixelbeacon.economy.Economy
 import club.tesseract.hypixelbeacon.economy.IEconomy
 import club.tesseract.hypixelbeacon.hook.PlaceholderAPIHook
-import club.tesseract.hypixelbeacon.listener.AdminItemListener
-import club.tesseract.hypixelbeacon.listener.BeaconBreakListener
-import club.tesseract.hypixelbeacon.listener.BeaconInteractListener
-import club.tesseract.hypixelbeacon.listener.BeaconPlaceListener
+import club.tesseract.hypixelbeacon.listener.*
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.event.HandlerList
 
 /**
@@ -28,6 +26,9 @@ class HypixelBeacon: HypixelBeaconAPI() {
 
 
     override fun onLoad(){
+        setInstance(this)
+        ConfigManager.loadConfigs()
+        DatabaseManager.connect()
         if(Bukkit.getPluginManager().getPlugin("BossShopPro") != null){
             economy = BossShopProPoints()
             (economy as BossShopProPoints).register()
@@ -38,11 +39,6 @@ class HypixelBeacon: HypixelBeaconAPI() {
         }
     }
     override fun onEnable() {
-        setInstance(this)
-        ConfigManager.loadConfigs()
-        DatabaseManager.connect()
-
-
         beaconManager = BeaconManager()
         loadListeners()
 
@@ -52,6 +48,9 @@ class HypixelBeacon: HypixelBeaconAPI() {
         beaconManager.loadScheduler()
         Bukkit.getScheduler().runTaskLater(this, Runnable {
             beaconManager.loadAllBeacons()
+            beaconManager.beacons.forEach {
+                it.location.block.type = Material.BEACON
+            }
             logger.info("Loaded all beacons!")
         }, 20L)
 
@@ -83,6 +82,7 @@ class HypixelBeacon: HypixelBeaconAPI() {
         Bukkit.getPluginManager().registerEvents(AdminItemListener, this)
         Bukkit.getPluginManager().registerEvents(BeaconPlaceListener, this)
         Bukkit.getPluginManager().registerEvents(BeaconInteractListener, this)
+        Bukkit.getPluginManager().registerEvents(PlayerListener, this)
     }
 
     companion object{

@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.atomic.AtomicReference
 
 
 class BeaconManager: IBeaconManager {
@@ -90,15 +91,18 @@ class BeaconManager: IBeaconManager {
     override fun addBeacon(location: Location): Boolean {
         if(beaconCache.containsKey(location))return false
         try {
+            val beaconData: AtomicReference<BeaconLocationModel?> = AtomicReference()
             transaction {
-                val beaconData = BeaconLocationModel.new {
+                 val loc = BeaconLocationModel.new {
                     x = location.blockX
                     y = location.blockY
                     z = location.blockZ
-                    world = location.world?.name ?: "world"
+                    world = (location.world?.name?: "world")
                 }
-                beaconCache[location] = Beacon(beaconData)
+                beaconData.set(loc)
             }
+            val value = beaconData.get() ?: return false
+            beaconCache[location] = Beacon(value)
         } catch (e: Exception) {
             e.printStackTrace()
             return false

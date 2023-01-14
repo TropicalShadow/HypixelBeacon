@@ -6,6 +6,7 @@ import club.tesseract.hypixelbeacon.database.models.PlayerDataModel
 import club.tesseract.hypixelbeacon.database.tables.PlayerData
 import org.black_ixx.bossshop.pointsystem.BSPointsPlugin
 import org.bukkit.OfflinePlayer
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 
@@ -13,38 +14,49 @@ class BossShopProPoints: BSPointsPlugin(HypixelBeacon.getPlugin().name, ConfigMa
     override fun format(amount: Long): String = "$amount $currencyNamePlural"
 
     override fun getBalance(player: UUID): Long {
-        PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.let {
-            return it.beacons
-        }?: return 0
+        return transaction {
+            return@transaction PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.beacons?: 0
+        }
     }
 
     override fun setBalance(player: UUID, amount: Long): Boolean {
-        PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.let {
-            it.beacons = amount
-            return true
-        }?: return false
+        return transaction{
+            val data = PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()
+            data?.let {
+                it.beacons = amount
+                return@transaction true
+            }?: return@transaction false
+        }
     }
 
     override fun addBalance(player: UUID, amount: Long): Boolean {
-        PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.let {
-            it.beacons += amount
-            return true
-        }?: return false
+        return transaction {
+            val data = PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()
+            data?.let{
+                it.beacons += amount
+                return@transaction true
+            }?:return@transaction false
+        }
     }
 
     override fun removeBalance(player: UUID, amount: Long): Boolean {
-        PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.let {
-            it.beacons -= amount
-            return true
-        }?: return false
+        return transaction {
+            val data = PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()
+            data?.let{
+                it.beacons -= amount
+                return@transaction true
+            }?:return@transaction false
+        }
     }
 
     override fun hasEnoughBalance(player: UUID, amount: Long): Boolean {
-        PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()?.let {
-            return it.beacons >= amount
-        }?: return false
+        return transaction {
+            val data = PlayerDataModel.find { PlayerData.id eq player }.firstOrNull()
+            data?.let{
+                return@transaction it.beacons >= amount
+            }?: return@transaction false
+        }
     }
-
     /**
      * Get the points from an offline player
      * @param player player to get points from

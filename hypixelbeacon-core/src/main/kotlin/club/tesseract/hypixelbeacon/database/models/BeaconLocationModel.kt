@@ -14,21 +14,4 @@ class BeaconLocationModel(id: EntityID<Int>) : IntEntity(id) {
     var lastMined by BeaconLocation.lastMined
     var hasBeenMined by BeaconLocation.hasBeenMined
 
-
-    override fun equals(other: Any?): Boolean {
-        if(other == null) return false
-        if(other !is BeaconLocation) return false
-        return false
-    }
-
-    override fun hashCode(): Int {
-        var result = x
-        result = 31 * result + y
-        result = 31 * result + z
-        result = 31 * result + world.hashCode()
-        result = 31 * result + lastMined.hashCode()
-        return result
-    }
-
-
 }
