@@ -56,7 +56,6 @@ object AdminItemListener: Listener {
         HypixelBeacon.getPlugin().beaconManager.removeBeacon(block.location)
         event.player.sendMessage(Component.text("Successfully removed beacon.", NamedTextColor.GREEN))
         event.block.type = Material.AIR
-        println("test")
     }
 
 }

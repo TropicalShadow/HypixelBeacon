@@ -32,7 +32,7 @@ class BeaconManager: IBeaconManager {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HypixelBeacon.getPlugin(), {
             beacons.filter {
                 it.location.world != null &&
-                it.hasBeenMined() && it.lastMined() + ThreadLocalRandom.current().nextLong(ConfigManager.getGeneralConfig().minBeaconRespawnTime, ConfigManager.getGeneralConfig().maxBeaconRespawnTime) < System.currentTimeMillis()
+                it.hasBeenMined() && (it.lastMined() + ThreadLocalRandom.current().nextLong(ConfigManager.getGeneralConfig().minBeaconRespawnTime, ConfigManager.getGeneralConfig().maxBeaconRespawnTime)) < (System.currentTimeMillis()/1000)
             }.forEach {
                 it.place(null)
             }

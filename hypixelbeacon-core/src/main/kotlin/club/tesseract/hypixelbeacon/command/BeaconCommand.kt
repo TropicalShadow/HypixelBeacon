@@ -1,9 +1,11 @@
 package club.tesseract.hypixelbeacon.command
 
 import club.tesseract.hypixelbeacon.HypixelBeacon
+import club.tesseract.hypixelbeacon.HypixelBeaconAPI
 import club.tesseract.hypixelbeacon.config.ConfigManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
@@ -73,6 +75,16 @@ object BeaconCommand: TabExecutor {
                 sender.sendMessage(Component.text("Admin Item added to your inventory.", NamedTextColor.GREEN))
             }
             "balance", "bal" -> {
+                if(args.size >= 2 && sender.hasPermission("hypixelbeacon.command.balance.other")){
+                    val target = Bukkit.getPlayer(args[1])
+                    if(target == null){
+                        sender.sendMessage(Component.text("Player not found.", NamedTextColor.RED))
+                        return true
+                    }
+                    val balance = HypixelBeaconAPI.getInstance().economy.getBalance(target.uniqueId)
+                    sender.sendMessage(Component.text("${target.name}'s balance: $balance", NamedTextColor.GREEN))
+                    return true
+                }
                 if(!sender.hasPermission("hypixelbeacon.command.balance")) {
                     sender.sendMessage(Component.text("You do not have permission to use this command.", NamedTextColor.RED))
                     return true
